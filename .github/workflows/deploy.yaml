@@ -30,6 +30,6 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           # Log in with token in CI mode
-          railway login --ci $RAILWAY_TOKEN
+          railway login --ci ${{ secrets.RAILWAY_TOKEN }}
           railway link --project ${{ secrets.RAILWAY_PROJECT_ID }} --service ${{ secrets.RAILWAY_SERVICE_ID }}
           railway up --detach
