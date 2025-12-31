@@ -29,4 +29,4 @@ jobs:
         shell: bash
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --detach --service ${{ secrets.RAILWAY_SERVICE_ID }}
+        run: railway up --service ${{ secrets.RAILWAY_SERVICE_ID }} --detach 
