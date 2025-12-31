@@ -28,9 +28,4 @@ jobs:
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          # 1. Link the project using the token's context
-          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-          
-          # 2. Deploy to the specific service
-          railway up --service ${{ secrets.RAILWAY_SERVICE_ID }} --detach
+        run: railway up --service ${{ secrets.RAILWAY_SERVICE_ID }} --detach
