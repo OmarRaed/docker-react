@@ -14,6 +14,7 @@ jobs:
       - run: docker run -e CI=true cygnetops/react-test npm test
 
   deploy:
+    environment: production 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
