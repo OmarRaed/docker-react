@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli@latest
@@ -28,4 +28,9 @@ jobs:
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --service ${{ secrets.RAILWAY_SERVICE_ID }} --detach 
+        run: |
+          # 1. Link the project using the token's context
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
+          
+          # 2. Deploy to the specific service
+          railway up --service ${{ secrets.RAILWAY_SERVICE_ID }} --detach
