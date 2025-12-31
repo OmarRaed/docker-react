@@ -29,5 +29,6 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
+          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}
           railway link --project ${{ secrets.RAILWAY_PROJECT_ID }} --service ${{ secrets.RAILWAY_SERVICE_ID }}
           railway up --detach
