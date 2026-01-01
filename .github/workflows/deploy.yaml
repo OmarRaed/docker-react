@@ -1,32 +1,31 @@
-name: Deploy Frontend
+name: Deploy React App
+
 on:
   push:
-    branches:
-      - master
+    branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker build -t cygnetops/react-test -f Dockerfile.dev .
-      - run: docker run -e CI=true cygnetops/react-test npm test
-
   deploy:
-    environment: production 
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli@latest
-        
-      - name: Railway installed version
-        run: railway --version
-
-      - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --service ${{ secrets.RAILWAY_SERVICE_ID }} --detach --verbose
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd C:/deploy/react-app || exit 1
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/OmarRaed/docker-react.git.
+            else
+              git pull
+            fi
+            docker build -t react-app .
+            docker stop react-app || true
+            docker rm react-app || true
+            docker run -d -p 80:80 --name react-app react-app
