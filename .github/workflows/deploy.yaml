@@ -1,13 +1,20 @@
-name: Deploy React App
-
+name: Deploy Frontend
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - master
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t cygnetops/react-test -f Dockerfile.dev .
+      - run: docker run -e CI=true cygnetops/react-test npm test
+
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -21,7 +28,7 @@ jobs:
           script: |
             cd C:/deploy/react-app || exit 1
             if [ ! -d ".git" ]; then
-              git clone https://github.com/OmarRaed/docker-react.git.
+              git clone https://github.com/OmarRaed/docker-react .
             else
               git pull
             fi
